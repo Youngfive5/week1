@@ -11,7 +11,6 @@ var devUglify = require('gulp-uglify'); //压缩js
 var cleanCss = require('gulp-clean-css'); //压缩css
 
 
-// 6.在gulp中创建js任务编译js文件，合并js，并且压缩（10分）；
 // 7.在gulp中创建watch任务，进行js，css文件监听，自动执行对应的任务（10分）；
 // 8.在gulp中创建default任务，默认执行browserSync服务，js，css，watch任务（10分）；
 // 9.在gulp中创建build任务，指向js,css任务，并把文件生成到dist文件夹（10分）；
@@ -56,3 +55,10 @@ gulp.task('devUglify', function () {
         .pipe(gulp.dest('./dist/js/'))
 })
 
+// watch 监听js压缩 css编译
+gulp.task('watch', function () {
+    return gulp.watch(['./src/scss/*.scss', './src/js/build.js'], gulp.parallel('devUglify', 'devSass'))
+})
+
+// 默认执行任务
+gulp.task('default', gulp.parallel('devSass', 'devConcat', 'devUglify', 'server', 'watch'))
