@@ -3,12 +3,12 @@ var url = require('url');
 var path = require('path');
 
 var gulp = require('gulp');
-var babel = require('gulp-babel');
-var devSass = require('gulp-sass');
-var devConcat = require('gulp-concat');
-var server = require('gulp-webserver');
-var devUglify = require('gulp-uglify');
-var cleanCss = require('gulp-clean-css');
+var babel = require('gulp-babel');  //es6->es5
+var devSass = require('gulp-sass'); //编译css
+var devConcat = require('gulp-concat'); //合并
+var server = require('gulp-webserver'); //起服务
+var devUglify = require('gulp-uglify'); //压缩js
+var cleanCss = require('gulp-clean-css'); //压缩css
 
 
 // 6.在gulp中创建js任务编译js文件，合并js，并且压缩（10分）；
@@ -39,11 +39,20 @@ gulp.task('server', function () {
         }))
 })
 
+// 合并js
+gulp.task('devConcat', function () {
+    return gulp.src('./src/js/*.js')
+        .pipe(devConcat('build.js')) //合并js
+        .pipe(gulp.dest('./src/js/'))
+})
+
 // 压缩js
-// gulp.task('default', () =>
-// 	gulp.src('src/app.js')
-// 		.pipe(babel({
-// 			presets: ['@babel/env']
-// 		}))
-// 		.pipe(gulp.dest('dist'))
-// );
+gulp.task('devUglify', function () {
+    return gulp.src('./src/js/build.js')
+        .pipe(babel({
+            presets: ['@babel/env']
+        })) //->es5
+        .pipe(devUglify())  //压缩js
+        .pipe(gulp.dest('./dist/js/'))
+})
+
